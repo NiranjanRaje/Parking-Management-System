@@ -1,4 +1,5 @@
-FROM maven:3.8.6-openjdk-17
+FROM maven:3.9.4-jdk-17
+
 
 WORKDIR /app
 
