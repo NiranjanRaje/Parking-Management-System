@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <title>Register</title>
+  <link
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
+          rel="stylesheet"
+          crossorigin="anonymous"
+  />
+  <style>
+    body {
+      background: url('https://hips.hearstapps.com/hmg-prod/images/vol-27-pcoty-2025-group-1-677dbc61d16c0.jpg?crop=1.00xw:0.847xh;0,0.153xh&resize=2048:*') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      color: white;
+    }
+
+    .container {
+      max-width: 400px;
+      margin-top: 100px;
+    }
+
+    .form-register {
+      background-color: rgba(255, 255, 255, 0.15);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      color: white;
+    }
+
+    .form-register h2 {
+      margin-bottom: 25px;
+      font-weight: 400;
+      text-align: center;
+      color: #ffffff;
+    }
+
+    .form-group label {
+      font-weight: bold;
+      color: #ffffff;
+    }
+
+    .form-control {
+      border-radius: 30px;
+      border: none;
+      padding: 10px 20px;
+      background-color: rgba(255, 255, 255, 0.25);
+      color: white;
+    }
+
+    .form-control::placeholder {
+      color: #e1e1e1;
+    }
+
+    .form-control:focus {
+      outline: none;
+      box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+      background-color: rgba(255, 255, 255, 0.35);
+      color: black;
+    }
+
+    .btn {
+      border-radius: 30px;
+      padding: 10px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+      background-color: #007bff;
+      border: none;
+    }
+
+    .btn-primary:hover {
+      background-color: #0056b3;
+    }
+
+    .btn-secondary {
+      background-color: rgba(255, 255, 255, 0.3);
+      border: none;
+      color: #fff;
+      margin-top: 10px;
+    }
+
+    .btn-secondary:hover {
+      background-color: rgba(255, 255, 255, 0.5);
+      color: #000;
+    }
+
+    .alert-danger {
+      margin-top: 15px;
+      background-color: rgba(255, 77, 77, 0.2);
+      color: #ff4d4d;
+      border: none;
+      border-radius: 10px;
+      padding: 10px;
+      font-weight: bold;
+      text-align: center;
+      display: none; /* hidden by default */
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <form
+          id="registerForm"
+          class="form-register"
+          method="post"
+          th:action="@{/parking-management-system/admin/register}"
+  >
+    <h2 class="form-register-heading">Admin Register</h2>
+
+    <div class="form-group">
+      <label for="email" class="sr-only">Email</label>
+      <input
+              type="email"
+              id="email"
+              name="email"
+              class="form-control"
+              placeholder="Email"
+              required
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="password" class="sr-only">Password</label>
+      <input
+              type="password"
+              id="password"
+              name="password"
+              class="form-control"
+              placeholder="Password"
+              required
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="company" class="sr-only">Company</label>
+      <input
+              type="text"
+              id="company"
+              name="company"
+              class="form-control"
+              placeholder="Company"
+              required
+              autofocus
+      />
+    </div>
+
+    <input type="hidden" id="csrfToken" name="_csrf" th:value="${csrfToken}" />
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Register</button>
+
+    <a th:href="@{/parking-management-system/login}" class="btn btn-secondary btn-block">
+      Already have an account? Sign in
+    </a>
+  </form>
+
+  <!-- Error message container -->
+  <div
+          id="errorMessage"
+          class="alert alert-danger"
+          role="alert"
+          style="display:none;"
+  ></div>
+</div>
+
+<!-- Thymeleaf injects server error message here -->
+<script th:inline="javascript">
+  /*<![CDATA[*/
+  const serverErrorMessage = /*[[${errorMessage}]]*/ '';
+  /*]]>*/
+</script>
+
+<script>
+  document.getElementById('registerForm').addEventListener('submit', function (e) {
+    const password = document.getElementById('password').value;
+    // Regex: Minimum 8 characters, at least one letter, one number, one special character
+    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+
+    if (!passwordRegex.test(password)) {
+      e.preventDefault();
+      const errorDiv = document.getElementById('errorMessage');
+      errorDiv.textContent =
+        'Password must be at least 8 characters long and include letters, numbers, and special characters.';
+      errorDiv.style.display = 'block';
+    }
+  });
+
+  window.addEventListener('DOMContentLoaded', () => {
+    const errorDiv = document.getElementById('errorMessage');
+    if (serverErrorMessage && serverErrorMessage.trim() !== '') {
+      errorDiv.textContent = serverErrorMessage;
+      errorDiv.style.display = 'block';
+    }
+  });
+
+  // Optional: Clear error message when typing in password field
+  document.getElementById('password').addEventListener('input', () => {
+    const errorDiv = document.getElementById('errorMessage');
+    errorDiv.style.display = 'none';
+    errorDiv.textContent = '';
+  });
+</script>
+</body>
+</html>

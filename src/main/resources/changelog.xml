@@ -1,0 +1,165 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="1" author="Niranjan.Raje">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="role"/>
+            </not>
+        </preConditions>
+        <createTable tableName="role">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="role" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+
+    <changeSet id="2" author="Niranjan.Raje">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="user"/>
+            </not>
+        </preConditions>
+        <createTable tableName="user">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="email" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="company_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_approved" type="tinyint(1)" defaultValue="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role" type="bigint">
+                <constraints foreignKeyName="fk_role_id" referencedTableName="role" referencedColumnNames="id"  nullable="false"/>
+
+            </column>
+            <column name="created" type="datetime"  defaultValue="NOW()">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_updated" type="datetime"  defaultValue="NOW() ON UPDATE NOW()">
+                <constraints nullable="false"/>
+
+            </column>
+            <column name="version" type="int" defaultValue="1">
+                <constraints nullable="false"/>
+            </column>
+            <column name="active_flag" type="tinyint(1)" defaultValue="true">
+                <constraints nullable="false"/>
+
+            </column>
+        </createTable>
+
+    </changeSet>
+
+    <changeSet id="3" author="Niranjan.Raje">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="vehicle"/>
+            </not>
+        </preConditions>
+        <createTable tableName="vehicle">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints foreignKeyName="fk_user_id" referencedTableName="user" referencedColumnNames="id"   nullable="false"/>
+            </column>
+            <column name="vehicle_type" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="vehicle_number" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="owner_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="model" type="varchar(255)"/>
+            <column name="color" type="varchar(255)"/>
+            <column name="is_approved" type="tinyint(1)" defaultValue="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created" type="datetime"  defaultValue="NOW()">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_updated" type="datetime"  defaultValue="NOW() ON UPDATE NOW()">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="int"  defaultValue="1">
+                <constraints nullable="false"/>
+            </column>
+            <column name="active_flag" type="tinyint(1)" defaultValue="true">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+
+
+    <changeSet id="6" author="Niranjan.Raje">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <rowCount expectedRows="2" tableName="role"/>
+            </not>
+        </preConditions>
+
+        <insert tableName="role">
+            <column name="role">admin</column>
+        </insert>
+
+        <insert tableName="role">
+            <column name="role">user</column>
+        </insert>
+
+    </changeSet>
+
+
+    <changeSet id="7" author="Niranjan.Raje">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="parking_space"/>
+            </not>
+        </preConditions>
+        <createTable tableName="parking_space">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="two_wheeler" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="four_wheeler" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+
+    <changeSet id="8" author="Niranjan.Raje">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <rowCount expectedRows="1" tableName="parking_space"/>
+            </not>
+        </preConditions>
+
+        <insert tableName="parking_space">
+            <column name="id">1</column>
+            <column name="two_wheeler">4</column>
+            <column name="four_wheeler">4</column>
+        </insert>
+
+    </changeSet>
+
+</databaseChangeLog>

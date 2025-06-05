@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Manage Users</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+    <style>
+        body {
+            background-color: #f0f2f5;
+            font-family: 'Inter', sans-serif;
+            color: #333;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+        /* Header styling */
+        .header {
+            background-color: #007bff;
+            color: #fff;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: center; /* Center the title */
+            align-items: center;
+            position: relative; /* for absolute positioning logout */
+            box-shadow: 0 4px 12px rgba(0, 123, 255, 0.4);
+            border-bottom-left-radius: 12px;
+            border-bottom-right-radius: 12px;
+        }
+        .header h1 {
+            margin: 0;
+            font-weight: 600;
+            font-size: 1.8rem;
+            letter-spacing: 1px;
+            text-align: center;
+        }
+        .logout-button {
+            position: absolute; /* place on the right */
+            right: 40px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: #0056b3;
+            border: none;
+            padding: 8px 20px;
+            font-weight: 600;
+            border-radius: 25px;
+            transition: background-color 0.3s ease;
+            color: #fff;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .logout-button:hover {
+            background-color: #004299;
+            text-decoration: none;
+            color: #fff;
+        }
+        /* Main container */
+        .container {
+            max-width: 850px; /* Reduced width */
+            margin: 40px auto 80px auto;
+            background: #fff;
+            padding: 30px 35px; /* Reduced padding */
+            border-radius: 16px;
+            box-shadow: 0 12px 24px rgba(0,0,0,0.1);
+        }
+        /* Main heading */
+        h1.page-title {
+            font-weight: 700;
+            font-size: 2.5rem;
+            margin-bottom: 40px;
+            text-align: center;
+            color: #222;
+        }
+        /* Navigation buttons */
+        .filter-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        .filter-buttons a.btn {
+            border-radius: 50px;
+            font-weight: 600;
+            padding: 12px 30px;
+            font-size: 16px;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .filter-buttons a.active {
+            background-color: #007bff !important;
+            color: #fff !important;
+            pointer-events: none;
+            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.4);
+        }
+        .filter-buttons a.inactive {
+            background-color: #e9ecef !important;
+            color: #007bff !important;
+        }
+        .filter-buttons a.inactive:hover {
+            background-color: #d0d9ff !important;
+            color: #0056b3 !important;
+        }
+        /* Table styling */
+        .table-responsive {
+            overflow-x: auto;
+        }
+        table.table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 10px;
+            font-size: 0.85rem; /* Smaller font */
+        }
+        thead th {
+            background-color: #007bff;
+            color: #fff;
+            font-weight: 600;
+            padding: 10px 12px; /* Smaller padding */
+            border-radius: 12px 12px 0 0;
+            border: none;
+            text-align: center;
+        }
+        tbody tr {
+            background-color: #f9fbff;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: transform 0.15s ease;
+        }
+        tbody tr:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+        tbody td {
+            vertical-align: middle;
+            padding: 10px 12px; /* Smaller padding */
+            text-align: center;
+            border: none;
+        }
+        /* Action buttons inside table */
+        .btn-approve {
+            background-color: #28a745;
+            border: none;
+            border-radius: 25px;
+            padding: 8px 20px;
+            font-weight: 600;
+            color: #fff;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 3px 8px rgba(40,167,69,0.4);
+        }
+        .btn-approve:hover:not(:disabled) {
+            background-color: #218838;
+        }
+        .btn-approve:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        .btn-view {
+            background-color: #17a2b8;
+            border: none;
+            border-radius: 25px;
+            padding: 8px 20px;
+            font-weight: 600;
+            color: #fff;
+            box-shadow: 0 3px 8px rgba(23,162,184,0.4);
+            transition: background-color 0.3s ease;
+            margin-left: 8px;
+        }
+        .btn-view:hover {
+            background-color: #138496;
+        }
+         /* Alert styling */
+        .alert-info {
+            font-size: 1.1rem;
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+        }
+        .alert-danger {
+            margin-top: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(220,53,69,0.2);
+            font-weight: 600;
+        }
+        /* Back to home button */
+        .btn-back-home {
+            display: block;
+            margin: 50px auto 0 auto;
+            border-radius: 30px;
+            padding: 12px 40px;
+            font-weight: 600;
+            font-size: 18px;
+            box-shadow: 0 4px 12px rgba(0,123,255,0.4);
+            transition: background-color 0.3s ease;
+        }
+        .btn-back-home:hover {
+            background-color: #0056b3;
+            color: #fff;
+        }
+        /* Responsive */
+        @media (max-width: 576px) {
+            .header {
+                flex-direction: column;
+                text-align: center;
+                padding: 15px 20px;
+                border-radius: 0 0 12px 12px;
+                justify-content: center;
+            }
+            .logout-button {
+                position: static;
+                transform: none;
+                width: 100%;
+                margin-top: 12px;
+            }
+            .filter-buttons {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .filter-buttons a {
+                width: 100%;
+            }
+            table.table thead th, tbody td {
+                padding: 8px 6px;
+            }
+            .container {
+                padding: 20px 20px;
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>Welcome to the Parking Management System</h1>
+    <a class="logout-button btn" th:href="@{/parking-management-system/logout}">Log out</a>
+</div>
+
+<div class="container">
+    <h1 class="page-title">Manage Users</h1>
+
+    <div class="filter-buttons text-center mb-4">
+        <a th:href="@{/parking-management-system/admin/allUsers}"
+           class="btn btn-sm"
+           th:classappend="${title == 'All Users' ? ' active' : ' inactive'}">All Users</a>
+
+        <a th:href="@{/parking-management-system/admin/pendingUsers}"
+           class="btn btn-sm"
+           th:classappend="${title == 'Pending Users' ? ' active' : ' inactive'}">Pending Users</a>
+
+        <a th:href="@{/parking-management-system/admin/approvedUsers}"
+           class="btn btn-sm"
+           th:classappend="${title == 'Approved Users' ? ' active' : ' inactive'}">Approved Users</a>
+    </div>
+
+    <h2 th:text="${title}" class="text-center mb-4"></h2>
+
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Email</th>
+                <th>Company Name</th>
+                <th>Role</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="user : ${users}">
+                <td th:text="${user.email}"></td>
+                <td th:text="${user.company}"></td>
+                <td th:text="${user.role.getRole()}"></td>
+                <td>
+                    <form th:action="@{/parking-management-system/admin/approveUser/{id}(id=${user.id})}" method="post" style="display:inline;">
+                        <input type="hidden" name="_method" value="put" />
+                        <button type="submit" class="btn-approve"
+                                th:disabled="${user.isApproved}"
+                                th:text="${user.isApproved ? 'Approved' : 'Approve'}"></button>
+                    </form>
+                    <a th:href="@{/parking-management-system/admin/user/{id}(id=${user.id})}"
+                       class="btn-view">View</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div th:if="${error}" class="alert alert-danger" role="alert">
+        <span th:text="${error}"></span>
+    </div>
+
+    <a href="/parking-management-system/admin/home" class="btn btn-primary btn-back-home">Back to Home</a>
+</div>
+
+</body>
+</html>

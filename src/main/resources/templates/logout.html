@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Logout</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+          background-color: #f8f9fa; /* Light background color */
+        }
+        .container {
+          margin-top: 100px; /* Space from the top */
+          max-width: 400px; /* Limit the width of the container */
+        }
+        .form-signin {
+          background-color: #ffffff; /* White background for the form */
+          padding: 30px; /* Add padding */
+          border-radius: 10px; /* Rounded corners */
+          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        }
+        .form-signin h2 {
+          margin-bottom: 20px; /* Space below the heading */
+          font-weight: 300; /* Light font weight for the heading */
+          text-align: center; /* Center the heading */
+        }
+        .btn-primary {
+          border-radius: 25px; /* Rounded corners for the button */
+          padding: 10px 20px; /* Increased padding for the button */
+          font-size: 18px; /* Larger font size for the button */
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <form class="form-signin" method="post" th:action="@{/parking-management-system/logout}">
+        <h2 class="form-signin-heading">Do you want to logout?</h2>
+        <input type="hidden" name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Log out</button>
+    </form>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

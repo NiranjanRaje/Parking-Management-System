@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>User Details</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <style>
+        body {
+            background-color: #f5f7fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+            min-height: 100vh;
+            padding-top: 40px;
+        }
+
+        .container {
+            max-width: 600px;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+            padding: 30px 40px;
+        }
+
+        h2 {
+            font-weight: 700;
+            font-size: 2.25rem;
+            margin-bottom: 30px;
+            text-align: center;
+            color: #222;
+        }
+
+        .card {
+            border: none;
+            border-radius: 14px;
+            box-shadow: 0 6px 18px rgba(0, 123, 255, 0.15);
+        }
+
+        .card-body {
+            padding: 30px 35px;
+        }
+
+        .card-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 25px;
+            color: #007bff;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 8px;
+        }
+
+        .card-text {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+
+        .card-text strong {
+            color: #0056b3;
+        }
+
+        .btn-group {
+            margin-top: 25px;
+            display: flex;
+            gap: 15px;
+            justify-content: space-between;
+        }
+
+        .btn-group form,
+        .btn-group a {
+            flex: 1;
+        }
+
+        /* Approve Button */
+        .btn-group .btn-success {
+            background: linear-gradient(135deg, #28a745, #218838);
+            box-shadow: 0 6px 20px rgba(40, 167, 69, 0.6);
+            border: none;
+            cursor: pointer;
+            color: #fff;
+            font-weight: 700;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            padding: 12px 32px;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 100%;
+            text-align: center;
+        }
+
+        .btn-group .btn-success:hover:not(:disabled) {
+            background: linear-gradient(135deg, #218838, #1b6e2b);
+            box-shadow: 0 10px 30px rgba(33, 136, 56, 0.8);
+            transform: scale(1.05);
+        }
+
+        .btn-group .btn-success:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+            box-shadow: none;
+            opacity: 0.8;
+        }
+
+        /* Back to Users Button - Fully Rounded */
+        .btn-group .btn-primary {
+            background: #007bff;
+            box-shadow: 0 6px 15px rgba(0, 123, 255, 0.4);
+            border: none;
+            text-align: center;
+            color: #fff;
+            padding: 12px 32px;
+            border-radius: 50px !important;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            width: 100%;
+            display: inline-block;
+        }
+
+        .btn-group .btn-primary:hover {
+            background: #0056b3;
+            box-shadow: 0 8px 20px rgba(0, 86, 179, 0.7);
+            text-decoration: none;
+            color: #fff;
+        }
+
+        @media (max-width: 576px) {
+            .btn-group {
+                flex-direction: column;
+            }
+
+            .btn-group .btn-success,
+            .btn-group .btn-primary {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>User Details</h2>
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">User Information</h5>
+            <p class="card-text"><strong>Email:</strong> <span th:text="${user.email}"></span></p>
+            <p class="card-text"><strong>Company Name:</strong> <span th:text="${user.company}"></span></p>
+            <p class="card-text"><strong>Role:</strong> <span th:text="${user.role.getRole()}"></span></p>
+            <p class="card-text"><strong>Created At:</strong> <span th:text="${#dates.format(user.created, 'yyyy-MM-dd HH:mm:ss')}"></span></p>
+            <p class="card-text"><strong>Updated At:</strong> <span th:text="${#dates.format(user.lastUpdated, 'yyyy-MM-dd HH:mm:ss')}"></span></p>
+        </div>
+    </div>
+
+    <div class="btn-group">
+        <form th:action="@{/parking-management-system/admin/approveUser/{id}(id=${user.id})}" method="post">
+            <input type="hidden" name="_method" value="put" />
+            <button type="submit" class="btn btn-success" th:disabled="${user.isApproved}">
+                <span th:text="${user.isApproved ? 'Approved' : 'Approve'}"></span>
+            </button>
+        </form>
+
+        <a th:href="@{/parking-management-system/admin/allUsers}" class="btn btn-primary">
+            Back to Users
+        </a>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
