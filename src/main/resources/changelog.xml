@@ -40,30 +40,27 @@
             <column name="company_name" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="is_approved" type="tinyint(1)" defaultValue="false">
+            <column name="is_approved" type="tinyint(1)" defaultValueBoolean="false">
                 <constraints nullable="false"/>
             </column>
             <column name="role" type="bigint">
-                <constraints foreignKeyName="fk_role_id" referencedTableName="role" referencedColumnNames="id"  nullable="false"/>
-
+                <constraints foreignKeyName="fk_role_id" referencedTableName="role" referencedColumnNames="id" nullable="false"/>
             </column>
-            <column name="created" type="datetime"  defaultValueComputed="CURRENT_TIMESTAMP">
+            <column name="created" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
                 <constraints nullable="false"/>
             </column>
-            <column name="last_updated" type="datetime"  defaultValueComputed="CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP">
-                <constraints nullable="false"/>
-
-            </column>
-            <column name="version" type="int" defaultValue="1">
+            <column name="last_updated" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP">
                 <constraints nullable="false"/>
             </column>
-            <column name="active_flag" type="tinyint(1)" defaultValue="true">
+            <column name="version" type="int" defaultValueNumeric="1">
                 <constraints nullable="false"/>
-
+            </column>
+            <column name="active_flag" type="tinyint(1)" defaultValueBoolean="true">
+                <constraints nullable="false"/>
             </column>
         </createTable>
-
     </changeSet>
+
 
     <changeSet id="3" author="Niranjan.Raje">
         <preConditions onFail="MARK_RAN">
@@ -76,7 +73,7 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="user_id" type="bigint">
-                <constraints foreignKeyName="fk_user_id" referencedTableName="user" referencedColumnNames="id"   nullable="false"/>
+                <constraints foreignKeyName="fk_user_id" referencedTableName="user" referencedColumnNames="id" nullable="false"/>
             </column>
             <column name="vehicle_type" type="varchar(255)">
                 <constraints nullable="false"/>
@@ -89,23 +86,24 @@
             </column>
             <column name="model" type="varchar(255)"/>
             <column name="color" type="varchar(255)"/>
-            <column name="is_approved" type="tinyint(1)" defaultValue="false">
+            <column name="is_approved" type="tinyint(1)" defaultValueBoolean="false">
                 <constraints nullable="false"/>
             </column>
-            <column name="created" type="datetime"  defaultValueComputed="CURRENT_TIMESTAMP">
+            <column name="created" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
                 <constraints nullable="false"/>
             </column>
-            <column name="last_updated" type="datetime"  defaultValueComputed="CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP">
+            <column name="last_updated" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP">
                 <constraints nullable="false"/>
             </column>
-            <column name="version" type="int"  defaultValue="1">
+            <column name="version" type="int" defaultValueNumeric="1">
                 <constraints nullable="false"/>
             </column>
-            <column name="active_flag" type="tinyint(1)" defaultValue="true">
+            <column name="active_flag" type="tinyint(1)" defaultValueBoolean="true">
                 <constraints nullable="false"/>
             </column>
         </createTable>
     </changeSet>
+
 
 
 
